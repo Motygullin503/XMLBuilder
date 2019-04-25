@@ -21,10 +21,12 @@ public class Child {
 
     @SerializedName("children")
     @Expose
+    private
     List<Child> children = null;
 
     @SerializedName("absoluteBoundingBox")
     @Expose
+    private
     AbsoluteBoundingBox boundingBox = null;
 
     public String getId() {

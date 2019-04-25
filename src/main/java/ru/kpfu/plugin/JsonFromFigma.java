@@ -83,7 +83,7 @@ public class JsonFromFigma extends AnAction {
 
                         System.out.println(out.getName() + " at the x: "
                                 + out.getBoundingBox().getX()
-                                + "/ y: " + out.getBoundingBox().getX()
+                                + " y: " + out.getBoundingBox().getY()
                                 + " width: " + out.getBoundingBox().getWidth()
                                 + " height: " + out.getBoundingBox().getHeight());
 
@@ -104,7 +104,7 @@ public class JsonFromFigma extends AnAction {
 
     private void addToChildList(List<Child> children) {
 
-        List<Child> newChildren = new ArrayList<Child>();
+        List<Child> newChildren;
 
         for (Child child : children) {
 
@@ -116,8 +116,6 @@ public class JsonFromFigma extends AnAction {
 
             if (newChildren != null) {
                 addToChildList(newChildren);
-            } else {
-                return;
             }
         }
 
