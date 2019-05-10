@@ -1,0 +1,24 @@
+<idea-plugin>
+  <version>1.0</version>
+  <id>ru.kpfu.plugin</id>
+  <name>ExamplePlugin</name>
+  <vendor email="test@example.com" url="http://www.example.com">Example</vendor>
+  <description>
+      Easily build your XML without any unnecessary tags, just like builder pattern does
+    </description>
+  <change-notes>
+      Release Beta 0.1
+    
+  </change-notes>
+  <depends>com.intellij.modules.lang</depends>
+  <project-components>
+    <component>
+      <implementation-class>ru.kpfu.plugin.TestProjectComponent</implementation-class>
+    </component>
+  </project-components>
+  <actions>
+    <action text="Get Json From Figma" id="FigmaJson" class="ru.kpfu.plugin.JsonFromFigma">
+      <add-to-group group-id="FileOpenGroup" relative-to-action="OpenFile" anchor="before"/>
+    </action>
+  </actions>
+</idea-plugin>

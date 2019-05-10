@@ -42,6 +42,7 @@ public class JsonFromFigma extends AnAction {
     public JsonFromFigma() {
         super();
         retrofit = new FigmaRetrofit();
+
     }
 
     @Override
@@ -74,7 +75,7 @@ public class JsonFromFigma extends AnAction {
 
                         System.out.println(out.getName() + " at the x: "
                                 + out.getBoundingBox().getX()
-                                + "/ y: " + out.getBoundingBox().getY()
+                                + " y: " + out.getBoundingBox().getY()
                                 + " width: " + out.getBoundingBox().getWidth()
                                 + " height: " + out.getBoundingBox().getHeight());
 
