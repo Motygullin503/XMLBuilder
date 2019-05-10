@@ -21,11 +21,21 @@ public class Child {
 
     @SerializedName("children")
     @Expose
+    private
     List<Child> children = null;
 
     @SerializedName("absoluteBoundingBox")
     @Expose
+    private
     AbsoluteBoundingBox boundingBox = null;
+
+    /*
+    0 - widget
+    1 - group
+     */
+    private Integer flutterType;
+
+    private String flutterName;
 
     public String getId() {
         return id;
@@ -65,5 +75,21 @@ public class Child {
 
     public void setBoundingBox(AbsoluteBoundingBox boundingBox) {
         this.boundingBox = boundingBox;
+    }
+
+    public Integer getFlutterType() {
+        return flutterType;
+    }
+
+    public void setFlutterType(Integer flutterType) {
+        this.flutterType = flutterType;
+    }
+
+    public String getFlutterName() {
+        return flutterName;
+    }
+
+    public void setFlutterName(String flutterName) {
+        this.flutterName = flutterName;
     }
 }

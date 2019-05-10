@@ -1,21 +1,13 @@
 package ru.kpfu.plugin;
 
-import android.util.Log;
-
-import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.UIBundle;
 
-import org.jetbrains.annotations.NotNull;
 
-
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,15 +15,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 import ru.kpfu.plugin.model.Child;
 import ru.kpfu.plugin.model.Document;
 import ru.kpfu.plugin.model.FigmaModel;
 import ru.kpfu.plugin.network.FigmaRetrofit;
+import ru.kpfu.plugin.utils.WidgetBuildHelper;
+import ru.kpfu.plugin.utils.WidgetComposeHelper;
 
 public class JsonFromFigma extends AnAction {
 
@@ -46,11 +36,12 @@ public class JsonFromFigma extends AnAction {
     private FigmaRetrofit retrofit;
     private List<Child> previous;
     private List<Child> output = new ArrayList<>();
+    private WidgetComposeHelper widgetComposeHelper = new WidgetComposeHelper();
+    private WidgetBuildHelper widgetBuildHelper = new WidgetBuildHelper();
 
     public JsonFromFigma() {
         super();
         retrofit = new FigmaRetrofit();
-
     }
 
     @Override
@@ -83,9 +74,16 @@ public class JsonFromFigma extends AnAction {
 
                         System.out.println(out.getName() + " at the x: "
                                 + out.getBoundingBox().getX()
-                                + "/ y: " + out.getBoundingBox().getX()
+                                + "/ y: " + out.getBoundingBox().getY()
                                 + " width: " + out.getBoundingBox().getWidth()
                                 + " height: " + out.getBoundingBox().getHeight());
+
+                        if (widgetComposeHelper.checkName(out)) {
+                            Child widget = widgetComposeHelper.returnWidget(out);
+
+                            writeToFile(widgetBuildHelper.build(widget));
+                        }
+
 
                     }
 
@@ -102,6 +100,21 @@ public class JsonFromFigma extends AnAction {
         }
     }
 
+    private void writeToFile(String output) {
+        try {
+            OutputStream itemFile = new FileOutputStream("C:\\Users\\Bulat\\IdeaProjects\\test\\src\\test" + ".dart");
+            itemFile.write(output.getBytes());
+            itemFile.flush();
+            itemFile.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void addToChildList(List<Child> children) {
 
         List<Child> newChildren = new ArrayList<Child>();
@@ -116,8 +129,6 @@ public class JsonFromFigma extends AnAction {
 
             if (newChildren != null) {
                 addToChildList(newChildren);
-            } else {
-                return;
             }
         }
 
@@ -278,13 +289,5 @@ public class JsonFromFigma extends AnAction {
         return buf.toString();
     }
 
-    @Override
-    public void update(@NotNull AnActionEvent event) {
-        VirtualFile[] files = CommonDataKeys.VIRTUAL_FILE_ARRAY.getData(event.getDataContext());
-        int num = files != null ? files.length : 0;
-        Presentation presentation = event.getPresentation();
-        presentation.setEnabled(num > 0);
-        presentation.setVisible(num > 0 || !ActionPlaces.isPopupPlace(event.getPlace()));
-    }
 
 }
